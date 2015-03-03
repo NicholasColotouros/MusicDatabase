@@ -298,6 +298,13 @@ INNER JOIN artist ART ON AR.artid = ART.artid
 INNER JOIN song_genre SG ON S.pid = SG.sid
 INNER JOIN genre G ON SG.genid = G.genid;
 
+CREATE VIEW HighestRatings ( ProductID, Rating )
+AS SELECT P.pid, AVG(R.rating_amt)
+FROM product P
+INNER JOIN rating R ON P.pid = R.pid
+GROUP BY P.pid
+ORDER BY 2, 1;
+
 -- Q8 has been incorporated into the create table's
 
 -- first is the strong password enforcement in customer
