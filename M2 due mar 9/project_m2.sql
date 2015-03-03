@@ -129,6 +129,24 @@ INSERT INTO song VALUES (1, 'The First Song', '1999-02-25', 120, 'These are the 
 INSERT INTO country VALUES (1, 'Canada', 1);
 
 -- Q4 TODO?
+-- Languages
+INSERT INTO language VALUES (2, 'French');
+INSERT INTO language VALUES (3, 'German');
+INSERT INTO language VALUES (4, 'Mandarin');
+INSERT INTO language VALUES (5, 'Greek');
+INSERT INTO language VALUES (6, 'Klingon');
+
+-- Formats
+INSERT INTO format VALUES (2, 'FLAC');
+INSERT INTO format VALUES (3, 'WMA');
+
+-- Countries
+INSERT INTO country VALUES (2, 'USA', 1);
+INSERT INTO country VALUES (3, 'Australia', 1);
+INSERT INTO country VALUES (4, 'United Kingdom', 1);
+INSERT INTO country VALUES (5, 'Germany', 3);
+INSERT INTO country VALUES (6, 'Greece', 5);
+
 -- Products
 INSERT INTO product VALUES ( 2, '$12.00');
 INSERT INTO product VALUES ( 3, '$2.00');
@@ -164,6 +182,9 @@ INSERT INTO song VALUES ( 14, 'Vital Signs', '1980-10-01', 120, 'Unstable condit
 -- Artists
 INSERT INTO artist VALUES ( 1, 'Rush', 'A Canadian power trio formed in Toronto, Ontario', '1968-08-01', 1);
 INSERT INTO artist VALUES ( 2, 'Triumph', 'A Canadian power trio formed in Mississauga, Ontario', '1975-08-01', 1);
+INSERT INTO artist VALUES ( 3, 'Genesis', 'An English rock band known for members such as Peter Gabriel and Phil Colline', '1967-01-01', 1);
+INSERT INTO artist VALUES ( 4, 'AC/DC', 'aalsidhf kosdv diofgre cifg', '1973-11-01', 3);
+INSERT INTO artist VALUES ( 5, 'Rammstein', 'dndng aifgn akg alha', '1994-01-01', 5);
 
 -- Albums
 INSERT INTO album VALUES ( 8, '2112', '1976-04-01', null);
