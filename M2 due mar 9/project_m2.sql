@@ -288,8 +288,11 @@ WHERE rating.cid = ANY (
 )
 
 -- Q7 VIEWS
-CREATE VIEW SongPlayerInfo ( Song, Artist, Album, Genre)
-AS SELECT S.title, ART.name, ALB.name, G.name
+
+-- This view represents the basic info a music player were to display
+-- if we had a preview of the song on the site
+CREATE VIEW SongPlayerInfo ( Song, Artist, Album, Genre, TrackNo)
+AS SELECT S.title, ART.name, ALB.name, G.name, T.track_number
 FROM song S
 INNER JOIN track T ON S.pid = T.sid
 INNER JOIN album ALB ON T.albid = ALB.pid
@@ -298,12 +301,26 @@ INNER JOIN artist ART ON AR.artid = ART.artid
 INNER JOIN song_genre SG ON S.pid = SG.sid
 INNER JOIN genre G ON SG.genid = G.genid;
 
+-- let's say we want to feature the album 2112 in a music player
+SELECT * 
+FROM SongPlayerInfo
+WHERE Album = '2112'
+ORDER BY TrackNo ASC;
+
+-- This view returns the highest rated products which is something
+-- a lot of customers look at in stores
 CREATE VIEW HighestRatings ( ProductID, Rating )
 AS SELECT P.pid, AVG(R.rating_amt)
 FROM product P
 INNER JOIN rating R ON P.pid = R.pid
 GROUP BY P.pid
 ORDER BY 2, 1;
+
+-- Let's say we want to get the most popular songs
+SELECT A.name AS AlbumName, HR.Rating
+FROM HighestRatings HR
+INNER JOIN Album A ON HR.productID = A.pid
+ORDER BY HR.Rating;
 
 -- Q8 has been incorporated into the create table's
 
