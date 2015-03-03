@@ -104,6 +104,7 @@ CREATE TABLE song_genre (
 CREATE TABLE purchase_product (
   purchaseid INT REFERENCES purchase(purchaseid) NOT NULL,
   pid INT REFERENCES product(pid) NOT NULL,
+  cost MONEY NOT NULL,
   PRIMARY KEY (purchaseid, pid)
 );
 
