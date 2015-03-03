@@ -127,7 +127,7 @@ INSERT INTO format VALUES (1, 'mp3');
 INSERT INTO song VALUES (1, 'The First Song', '1999-02-25', 120, 'These are the lyrics to the first song!', 1, 1);
 INSERT INTO country VALUES (1, 'Canada', 1);
 
--- Q4 TODO
+-- Q4 TODO?
 -- Products
 INSERT INTO product VALUES ( 2, '$12.00');
 INSERT INTO product VALUES ( 3, '$2.00');
@@ -137,6 +137,14 @@ INSERT INTO product VALUES ( 6, '$2.00');
 INSERT INTO product VALUES ( 7, '$2.00');
 INSERT INTO product VALUES ( 8, '$21.00');
 
+INSERT INTO product VALUES ( 9, '$1.00');
+INSERT INTO product VALUES ( 10, '$1.00');
+INSERT INTO product VALUES ( 11, '$1.50');
+INSERT INTO product VALUES ( 12, '$2.40');
+INSERT INTO product VALUES ( 13, '$2.30');
+INSERT INTO product VALUES ( 14, '$2.20');
+INSERT INTO product VALUES ( 15, '$1.10');
+
 -- Songs
 INSERT INTO song VALUES ( 2, '2112', '1976-02-01', 121, 'And the meek shall inherit the Earth...', 1, 1);
 INSERT INTO song VALUES ( 3, 'A Passage to Bangkok', '1976-02-01', 92, 'Our first stop is in Bogota...', 1, 1);
@@ -145,11 +153,20 @@ INSERT INTO song VALUES ( 5, 'Lessons', '1976-02-01', 110, 'Sweet memories,\nI n
 INSERT INTO song VALUES ( 6, 'Tears', '1976-02-01', 90, 'All of the seasons,\nAnd all of the days...', 1, 1);
 INSERT INTO song VALUES ( 7, 'Something for Nothing', '1976-02-01', 130, 'Waiting for the winds of change to sweep the clouds away...', 1, 1);
 
+INSERT INTO song VALUES ( 9, 'Tom Sawyer', '1980-10-01', 120, 'A modern day warrior of mean, mean stride...', 1, 1);
+INSERT INTO song VALUES ( 10, 'Red Barchetta', '1980-10-01', 110, 'My uncle has a country place, that no one knows about...', 1, 1);
+INSERT INTO song VALUES ( 11, 'YYZ', '1980-10-01', 747, null, 1, 1);
+INSERT INTO song VALUES ( 12, 'Limelight', '1980-10-01', 120, 'Living on a lighted stages approaches the unreal...', 1, 1);
+INSERT INTO song VALUES ( 13, 'Witch Hunt', '1980-10-01', 100, 'The night is black, without a moon...', 1, 1);
+INSERT INTO song VALUES ( 14, 'Vital Signs', '1980-10-01', 120, 'Unstable condition. A sympton of life...', 1, 1);
+
 -- Artists
 INSERT INTO artist VALUES ( 1, 'Rush', 'A Canadian power trio formed in Toronto, Ontario', '1968-08-01', 1);
+INSERT INTO artist VALUES ( 2, 'Triumph', 'A Canadian power trio formed in Mississauga, Ontario', '1975-08-01', 1);
 
 -- Albums
 INSERT INTO album VALUES ( 8, '2112', '1976-04-01', null);
+INSERT INTO album VALUES (15, 'Moving Pictures', '1981-02-12', null);
 
 -- Genres
 INSERT INTO genre VALUES ( 1, 'Rock and Roll');
@@ -171,8 +188,16 @@ INSERT INTO song_artist VALUES ( 1, 5);
 INSERT INTO song_artist VALUES ( 1, 6);
 INSERT INTO song_artist VALUES ( 1, 7);
 
+INSERT INTO song_artist VALUES ( 1, 9);
+INSERT INTO song_artist VALUES ( 1, 10);
+INSERT INTO song_artist VALUES ( 1, 11);
+INSERT INTO song_artist VALUES ( 1, 12);
+INSERT INTO song_artist VALUES ( 1, 13);
+INSERT INTO song_artist VALUES ( 1, 14);
+
 -- album artist
 INSERT INTO album_artist VALUES (1, 8);
+INSERT INTO album_artist VALUES (1, 15);
 
 -- tracks
 INSERT INTO track VALUES (2, 8, 1);
@@ -182,13 +207,27 @@ INSERT INTO track VALUES (5, 8, 4);
 INSERT INTO track VALUES (6, 8, 5);
 INSERT INTO track VALUES (7, 8, 6);
 
+INSERT INTO track VALUES (9, 15, 1);
+INSERT INTO track VALUES (10, 15, 2);
+INSERT INTO track VALUES (11, 15, 3);
+INSERT INTO track VALUES (12, 15, 4);
+INSERT INTO track VALUES (13, 15, 5);
+INSERT INTO track VALUES (14, 15, 6);
+
 -- song Genres
-INSERT INTO song_genre VALUES ( 2, 3);
 INSERT INTO song_genre VALUES ( 3, 2);
-INSERT INTO song_genre VALUES ( 4, 2);
-INSERT INTO song_genre VALUES ( 5, 2);
-INSERT INTO song_genre VALUES ( 6, 2);
-INSERT INTO song_genre VALUES ( 7, 2);
+INSERT INTO song_genre VALUES ( 2, 3);
+INSERT INTO song_genre VALUES ( 2, 4);
+INSERT INTO song_genre VALUES ( 2, 5);
+INSERT INTO song_genre VALUES ( 2, 6);
+INSERT INTO song_genre VALUES ( 2, 7);
+
+INSERT INTO song_genre VALUES ( 1, 9);
+INSERT INTO song_genre VALUES ( 1, 10);
+INSERT INTO song_genre VALUES ( 1, 11);
+INSERT INTO song_genre VALUES ( 1, 12);
+INSERT INTO song_genre VALUES ( 1, 13);
+INSERT INTO song_genre VALUES ( 1, 14);
 
 -- Q5 TODO --> try to do stuff that is different from the Views
 
@@ -248,7 +287,16 @@ WHERE rating.cid = ANY (
   WHERE neg_reviews > 100
 )
 
--- Q7 TODO
+-- Q7 VIEWS
+CREATE VIEW SongPlayerInfo ( Song, Artist, Album, Genre)
+AS SELECT S.title, ART.name, ALB.name, G.name
+FROM song S
+INNER JOIN track T ON S.pid = T.sid
+INNER JOIN album ALB ON T.albid = ALB.pid
+INNER JOIN album_artist AR ON ALB.pid = AR.albid
+INNER JOIN artist ART ON AR.artid = ART.artid
+INNER JOIN song_genre SG ON S.pid = SG.sid
+INNER JOIN genre G ON SG.genid = G.genid;
 
 -- Q8 has been incorporated into the create table's
 
