@@ -338,7 +338,7 @@ INNER JOIN rating R ON P.pid = R.pid
 GROUP BY P.pid
 ORDER BY 2, 1;
 
--- Let's say we want to get the most popular songs
+-- Let's say we want to get the highest rated albums
 SELECT A.name AS AlbumName, HR.Rating
 FROM HighestRatings HR
 INNER JOIN Album A ON HR.productID = A.pid
