@@ -359,7 +359,7 @@ SELECT customer.cid, customer.firstname, customer.lastname FROM customer
 -- Q6
 
 -- 10% off on all products that are rated poorly
--- yes, I know this would be very easy to exploit IRL
+-- yes, I know this would be very easy to exploit
 
 UPDATE product
 SET price = price - price/10
@@ -368,9 +368,8 @@ WHERE product.pid = ANY (
   FROM product, rating
   WHERE product.pid = rating.pid
     AND rating.rating_amt < 2
-)
+);
 
--- I haven't actually tested that this works
 -- updates the price of an album
 -- to the sum of the prices of its songs
 
@@ -383,9 +382,9 @@ FROM (
     AND track.sid = song.pid
   GROUP BY product.pid
 ) AS ps
-WHERE ps.pid = product.pid
+WHERE ps.pid = product.pid;
 
--- I haven't actually tested that this works
+
 -- lower a purchase amount by the customer's tax rate (a tax rebate)
 
 UPDATE purchase
@@ -393,9 +392,9 @@ SET price = price - price * country.tax_rate
 FROM customer
 INNER JOIN country
 ON customer.location_id = country.coid
-WHERE purchase.cid = customer.cid
+WHERE purchase.cid = customer.cid;
 
--- I haven't actually tested that this works
+
 -- remove all ratings from users who only give negative ratings ( < 3 )
 -- in large enough quantities ( > 100 )
 
@@ -410,7 +409,7 @@ WHERE rating.cid = ANY (
     GROUP BY customer.cid
   ) as neg_reviewers
   WHERE neg_reviews > 100
-)
+);
 
 -- Q7 VIEWS
 
@@ -479,8 +478,3 @@ INSERT INTO format VALUES (1, 'mp3');
 INSERT INTO song VALUES (1, 'The First Song', '1999-02-25', 120, 'These are the lyrics to the first song!', 1, 1);
 
 INSERT INTO rating VALUES (1, 1, 6);
-
--- DB CLEANUP STUFF, REMOVE FROM FINAL VERSION
-
-DROP SCHEMA PUBLIC CASCADE;
-CREATE SCHEMA PUBLIC;
