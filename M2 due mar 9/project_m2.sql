@@ -128,7 +128,7 @@ INSERT INTO format VALUES (1, 'mp3');
 INSERT INTO song VALUES (1, 'The First Song', '1999-02-25', 120, 'These are the lyrics to the first song!', 1, 1);
 INSERT INTO country VALUES (1, 'Canada', 1);
 
--- Q4 TODO?
+-- Q4
 -- Languages
 INSERT INTO language VALUES (2, 'French');
 INSERT INTO language VALUES (3, 'German');
@@ -252,29 +252,29 @@ INSERT INTO song_genre VALUES ( 1, 13);
 INSERT INTO song_genre VALUES ( 1, 14);
 
 -- customers
-INSERT INTO customer (cid,firstname,lastname,email,credit_card_number,birthdate,password,coid,langid) VALUES 
-(1,'Paloma','Webster','ac@Utsemper.ca','4108672824362294','08/28/15','IGU00ERJ8JT',6,5),
-(2,'Lareina','Stout','amet@orciluctus.net','5198813210772357','01/24/16','MTA89PSM3AA',3,3),
-(3,'Rajah','Miles','ultrices.posuere@posuere.com','5324420108115308','03/28/15','DUL21NFY4YD',4,5),
-(4,'Abigail','Duffy','nec@mus.ca','5338672297834414','07/18/14','CLS11VZO7VF',2,3),
-(5,'Brent','Forbes','pharetra@ultricies.org','346686974249780','05/23/15','ZPC47TAX0YF',5,3),
-(6,'Merritt','Goff','Cras.lorem@dapibusgravida.co.uk','5152701738141470','09/05/14','PPM29GIT6CF',4,3),
-(7,'Mufutau','Alston','arcu.Vestibulum@metus.ca','348720457968760','01/25/16','ZLI52RNM7YQ',5,5),
-(8,'Regina','Richmond','sem@magna.ca','4816871222713962','04/15/14','REY34ZWG8FF',2,5),
-(9,'Iris','Carroll','posuere.cubilia.Curae@Nullafacilisis.co.uk','4489335070550441','12/07/15','CXL58MMM4EM',6,5),
-(10,'Beck','Dominguez','urna@netuset.ca','348694615262095','08/07/14','NQJ40TET7JF',3,3);
+INSERT INTO customer (cid,firstname,lastname,email,credit_card_number,birthdate,password,location_id,language_id) VALUES 
+(1,'Paloma','Webster','ac@Utsemper.ca','4108672824362294','08/28/15','IGU00ERj8JTa!',6,5),
+(2,'Lareina','Stout','amet@orciluctus.net','5198813210772357','01/24/16','MTA89PSM3AAa!',3,3),
+(3,'Rajah','Miles','ultrices.posuere@posuere.com','5324420108115308','03/28/15','DUL21NFY4YDa!',4,5),
+(4,'Abigail','Duffy','nec@mus.ca','5338672297834414','07/18/14','CLS11VZO7VFa!',2,3),
+(5,'Brent','Forbes','pharetra@ultricies.org','346686974249780','05/23/15','ZPC47TAX0YFa!',5,3),
+(6,'Merritt','Goff','Cras.lorem@dapibusgravida.co.uk','5152701738141470','09/05/14','PPM29GIT6CFa!',4,3),
+(7,'Mufutau','Alston','arcu.Vestibulum@metus.ca','348720457968760','01/25/16','ZLI52RNM7YQa!',5,5),
+(8,'Regina','Richmond','sem@magna.ca','4816871222713962','04/15/14','REY34ZWG8FFa!',2,5),
+(9,'Iris','Carroll','posuere.cubilia.Curae@Nullafacilisis.co.uk','448933507055044','12/07/15','CXL58MMM4EMa!',6,5),
+(10,'Beck','Dominguez','urna@netuset.ca','348694615262095','08/07/14','NQJ40TET7JFa!',3,3);
 
 -- purchases
-INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (1,6,"12/22/14",'$214.00');
-INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (2,5,"03/21/12",'$202.00');
-INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (3,6,"05/08/04",'$202.00');
-INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (4,8,"05/09/02",'$22.00');
-INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (5,9,"01/25/14",'$3.50');
-INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (6,10,"04/18/02",'$1.50');
-INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (7,3,"12/17/05",'$4.30');
-INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (8,7,"08/13/11",'$2.20');
-INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (9,7,"11/10/12",'$26.00');
-INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (10,2,"05/04/08",'$1.00');
+INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (1,6,'12/22/14','$214.00');
+INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (2,5,'03/21/12','$202.00');
+INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (3,6,'05/08/04','$202.00');
+INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (4,8,'05/09/02','$22.00');
+INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (5,9,'01/25/14','$3.50');
+INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (6,10,'04/18/02','$1.50');
+INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (7,3,'12/17/05','$4.30');
+INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (8,7,'08/13/11','$2.20');
+INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (9,7,'11/10/12','$26.00');
+INSERT INTO purchase (purchaseid,cid,purchase_date,price) VALUES (10,2,'05/04/08','$1.00');
 
 -- purchase_products
 
@@ -300,11 +300,11 @@ INSERT INTO purchase_product (purchaseid,pid,cost) VALUES (10,9,'$1.00');
 
 -- rating
 
-INSERT INTO "rating" (pid,cid,rating_amt) VALUES (4,8,1);
-INSERT INTO "rating" (pid,cid,rating_amt) VALUES (3,3,3);
+INSERT INTO "rating" (pid,cid,rating_amt) VALUES (4,8,5);
+INSERT INTO "rating" (pid,cid,rating_amt) VALUES (3,3,5);
 INSERT INTO "rating" (pid,cid,rating_amt) VALUES (5,10,2);
-INSERT INTO "rating" (pid,cid,rating_amt) VALUES (10,8,4);
-INSERT INTO "rating" (pid,cid,rating_amt) VALUES (1,9,2);
+INSERT INTO "rating" (pid,cid,rating_amt) VALUES (10,8,5);
+INSERT INTO "rating" (pid,cid,rating_amt) VALUES (1,9,5);
 INSERT INTO "rating" (pid,cid,rating_amt) VALUES (15,6,3);
 INSERT INTO "rating" (pid,cid,rating_amt) VALUES (13,5,3);
 INSERT INTO "rating" (pid,cid,rating_amt) VALUES (5,9,5);
@@ -318,44 +318,42 @@ INSERT INTO "rating" (pid,cid,rating_amt) VALUES (9,7,2);
 INSERT INTO "rating" (pid,cid,rating_amt) VALUES (12,8,3);
 INSERT INTO "rating" (pid,cid,rating_amt) VALUES (2,4,2);
 INSERT INTO "rating" (pid,cid,rating_amt) VALUES (6,7,1);
-INSERT INTO "rating" (pid,cid,rating_amt) VALUES (1,9,1);
 
--- Q5 TODO --> try to do stuff that is different from the Views
+-- Q5
 
--- i haven't actually tested all of these either
 -- shows how frequently a song from each genre is bought
-SELECT genre.name, COUNT(Genre.genreid) FROM purchase_product 
-	JOIN product on purchase_product.pid = product.pid
-	JOIN song onproduct.pid = song.pid
-	JOIN song_genre on song.pid = genre.genreid
-	JOIN genre on genre.genreid = song_genre.genreid
-	GROUP BY genre.genreid
+SELECT genre.genid, genre.name, COUNT(Genre.genid) FROM genre
+	JOIN song_genre ON genre.genid = song_genre.genid
+	JOIN song ON song_genre.sid = song.pid
+	JOIN product ON song.pid = product.pid
+	JOIN purchase_product ON purchase_product.pid = product.pid
+	GROUP BY genre.genid, genre.name;
 
 -- shows top 5 most expensive purchases and the customers who made them
 SELECT customer.cid, customer.firstname, customer.lastname, purchase.price FROM purchase
 	JOIN customer on purchase.cid = customer.cid
 	ORDER BY purchase.price DESC
-	LIMIT 5
+	LIMIT 5;
 
 -- shows average customer rating for each artist
-SELECT AVG(rating_amt) FROM artist
+SELECT artist.name, AVG(rating_amt) FROM artist
 	JOIN song_artist ON artist.artid = song_artist.artid
-	JOIN song ON song_artist.pid = song.pid
+	JOIN song ON song_artist.sid = song.pid
 	JOIN rating ON rating.pid = song.pid
-	GROUP BY rating.pid
+	GROUP BY artist.name;
 
--- shows all songs in the Progressive Rock genre
+-- shows all songs in the Hard Rock genre
 SELECT song.pid, song.title FROM genre
-	JOIN song_genre ON genre.genreid = song_genre.genreid
+	JOIN song_genre ON genre.genid = song_genre.genid
 	JOIN song ON song_genre.sid = song.pid
-	WHERE genre.name = 'Progressive Rock'
+	WHERE genre.name = 'Hard Rock';
 
--- shows the youngest customer from Canada
+-- shows the youngest customer from the USA
 SELECT customer.cid, customer.firstname, customer.lastname FROM customer
 	JOIN country ON country.coid = customer.location_id
-	WHERE country.name = 'Canada'
+	WHERE country.name = 'USA'
 	ORDER BY customer.birthdate ASC
-	LIMIT 1
+	LIMIT 1;
 
 
 -- Q6
