@@ -1,0 +1,287 @@
+These are all of the desired outputs specified in the instructions:
+
+==============================
+========= QUESTION 2 =========
+==============================
+Tables are described in the same order as they are
+listed in the table creation statements.
+
+              Table "cs421g03.product"
+ Column |  Type   | Modifiers | Storage | Description
+--------+---------+-----------+---------+-------------
+ pid    | integer | not null  | plain   |
+ price  | money   | not null  | plain   |
+Indexes:
+    "product_pkey" PRIMARY KEY, btree (pid)
+Referenced by:
+    TABLE "album" CONSTRAINT "album_pid_fkey" FOREIGN KEY (pid) REFERENCES product(pid) ON DELETE CASCADE
+    TABLE "purchase_product" CONSTRAINT "purchase_product_pid_fkey" FOREIGN KEY (pid) REFERENCES product(pid)
+    TABLE "rating" CONSTRAINT "rating_pid_fkey" FOREIGN KEY (pid) REFERENCES product(pid) ON DELETE CASCADE
+    TABLE "song" CONSTRAINT "song_pid_fkey" FOREIGN KEY (pid) REFERENCES product(pid) ON DELETE CASCADE
+Has OIDs: no
+
+
+
+                      Table "cs421g03.language"
+ Column |         Type          | Modifiers | Storage  | Description
+--------+-----------------------+-----------+----------+-------------
+ langid | integer               | not null  | plain    |
+ name   | character varying(50) |           | extended |
+Indexes:
+    "language_pkey" PRIMARY KEY, btree (langid)
+Referenced by:
+    TABLE "country" CONSTRAINT "country_language_id_fkey" FOREIGN KEY (language_id) REFERENCES language(langid)
+    TABLE "customer" CONSTRAINT "customer_language_id_fkey" FOREIGN KEY (language_id) REFERENCES language(langid)
+    TABLE "song" CONSTRAINT "song_language_id_fkey" FOREIGN KEY (language_id) REFERENCES language(langid)
+Has OIDs: no
+
+
+
+
+                         Table "cs421g03.country"
+   Column    |         Type          | Modifiers | Storage  | Description
+-------------+-----------------------+-----------+----------+-------------
+ coid        | integer               | not null  | plain    |
+ name        | character varying(50) |           | extended |
+ tax_rate    | double precision      |           | plain    |
+ language_id | integer               |           | plain    |
+Indexes:
+    "country_pkey" PRIMARY KEY, btree (coid)
+Foreign-key constraints:
+    "country_language_id_fkey" FOREIGN KEY (language_id) REFERENCES language(langid)
+Referenced by:
+    TABLE "artist" CONSTRAINT "artist_location_of_origin_id_fkey" FOREIGN KEY (location_of_origin_id) REFERENCES country(coid)
+    TABLE "customer" CONSTRAINT "customer_location_id_fkey" FOREIGN KEY (location_id) REFERENCES country(coid)
+Has OIDs: no
+
+                        Table "cs421g03.format"
+  Column   |         Type          | Modifiers | Storage  | Description
+-----------+-----------------------+-----------+----------+-------------
+ fid       | integer               | not null  | plain    |
+ extension | character varying(20) |           | extended |
+Indexes:
+    "format_pkey" PRIMARY KEY, btree (fid)
+Referenced by:
+    TABLE "song" CONSTRAINT "song_format_id_fkey" FOREIGN KEY (format_id) REFERENCES format(fid)
+Has OIDs: no
+
+
+                            Table "cs421g03.song"
+    Column     |          Type          | Modifiers | Storage  | Description
+---------------+------------------------+-----------+----------+-------------
+ pid           | integer                | not null  | plain    |
+ title         | character varying(100) | not null  | extended |
+ date_recorded | date                   |           | plain    |
+ bpm           | integer                |           | plain    |
+ lyrics        | text                   |           | extended |
+ language_id   | integer                |           | plain    |
+ format_id     | integer                |           | plain    |
+Indexes:
+    "song_pkey" PRIMARY KEY, btree (pid)
+Foreign-key constraints:
+    "song_format_id_fkey" FOREIGN KEY (format_id) REFERENCES format(fid)
+    "song_language_id_fkey" FOREIGN KEY (language_id) REFERENCES language(langid
+)
+    "song_pid_fkey" FOREIGN KEY (pid) REFERENCES product(pid) ON DELETE CASCADE
+Referenced by:
+    TABLE "song_artist" CONSTRAINT "song_artist_sid_fkey" FOREIGN KEY (sid) REFE
+RENCES song(pid)
+    TABLE "song_genre" CONSTRAINT "song_genre_sid_fkey" FOREIGN KEY (sid) REFERE
+NCES song(pid)
+TABLE "track" CONSTRAINT "track_sid_fkey" FOREIGN KEY (sid) REFERENCES song(pid)
+Has OIDs: no
+
+
+                           Table "cs421g03.artist"
+        Column         |          Type          | Modifiers | Storage  | Descrip
+tion
+-----------------------+------------------------+-----------+----------+--------
+-----
+ artid                 | integer                | not null  | plain    |
+ name                  | character varying(100) | not null  | extended |
+ description           | text                   |           | extended |
+ date_formed           | date                   |           | plain    |
+ location_of_origin_id | integer                |           | plain    |
+Indexes:
+    "artist_pkey" PRIMARY KEY, btree (artid)
+Foreign-key constraints:
+    "artist_location_of_origin_id_fkey" FOREIGN KEY (location_of_origin_id) REFE
+RENCES country(coid)
+Referenced by:
+    TABLE "album_artist" CONSTRAINT "album_artist_artid_fkey" FOREIGN KEY (artid
+) REFERENCES artist(artid)
+    TABLE "song_artist" CONSTRAINT "song_artist_artid_fkey" FOREIGN KEY (artid)
+REFERENCES artist(artid)
+Has OIDs: no
+
+
+                           Table "cs421g03.album"
+    Column     |          Type          | Modifiers | Storage  | Description
+---------------+------------------------+-----------+----------+-------------
+ pid           | integer                | not null  | plain    |
+ name          | character varying(100) | not null  | extended |
+ date_released | date                   |           | plain    |
+ artwork       | bytea                  |           | extended |
+Indexes:
+    "album_pkey" PRIMARY KEY, btree (pid)
+Foreign-key constraints:
+    "album_pid_fkey" FOREIGN KEY (pid) REFERENCES product(pid) ON DELETE CASCADE
+Referenced by:
+    TABLE "album_artist" CONSTRAINT "album_artist_albid_fkey" FOREIGN KEY (albid) REFERENCES album(pid)
+    TABLE "track" CONSTRAINT "track_albid_fkey" FOREIGN KEY (albid) REFERENCES album(pid)
+Has OIDs: no
+
+
+                        Table "cs421g03.genre"
+ Column |          Type          | Modifiers | Storage  | Description
+--------+------------------------+-----------+----------+-------------
+ genid  | integer                | not null  | plain    |
+ name   | character varying(100) | not null  | extended |
+Indexes:
+    "genre_pkey" PRIMARY KEY, btree (genid)
+Referenced by:
+    TABLE "song_genre" CONSTRAINT "song_genre_genid_fkey" FOREIGN KEY (genid) REFERENCES genre(genid)
+Has OIDs: no
+
+
+
+
+                            Table "cs421g03.customer"
+       Column       |          Type          | Modifiers | Storage  | Descriptio
+n
+--------------------+------------------------+-----------+----------+-----------
+--
+ cid                | integer                | not null  | plain    |
+ firstname          | character varying(50)  |           | extended |
+ lastname           | character varying(50)  |           | extended |
+ email              | character varying(100) | not null  | extended |
+ credit_card_number | character varying(20)  |           | extended |
+ birthdate          | date                   |           | plain    |
+ password           | character varying(100) | not null  | extended |
+ location_id        | integer                |           | plain    |
+ language_id        | integer                |           | plain    |
+Indexes:
+    "customer_pkey" PRIMARY KEY, btree (cid)
+Check constraints:
+    "strong_password" CHECK (password::text ~ '^(?=.*[A-Z])(?=.*[!?@$#&*_-])(?=.
+*[0-9])(?=.*[a-z]).{8,}$'::text)
+Foreign-key constraints:
+    "customer_language_id_fkey" FOREIGN KEY (language_id) REFERENCES language(la
+ngid)
+    "customer_location_id_fkey" FOREIGN KEY (location_id) REFERENCES country(coi
+d)
+Referenced by:
+    TABLE "purchase" CONSTRAINT "purchase_cid_fkey" FOREIGN KEY (cid) REFERENCES
+ customer(cid)
+    TABLE "rating" CONSTRAINT "rating_cid_fkey" FOREIGN KEY (cid) REFERENCES cus
+tomer(cid)
+Has OIDs: no
+
+
+
+
+                  Table "cs421g03.purchase"
+    Column     |  Type   | Modifiers | Storage | Description
+---------------+---------+-----------+---------+-------------
+ purchaseid    | integer | not null  | plain   |
+ cid           | integer | not null  | plain   |
+ purchase_date | date    |           | plain   |
+ price         | money   |           | plain   |
+Indexes:
+    "purchase_pkey" PRIMARY KEY, btree (purchaseid)
+Foreign-key constraints:
+    "purchase_cid_fkey" FOREIGN KEY (cid) REFERENCES customer(cid)
+Referenced by:
+    TABLE "purchase_product" CONSTRAINT "purchase_product_purchaseid_fkey" FOREIGN KEY (purchaseid) REFERENCES purchase(purchaseid)
+Has OIDs: no
+
+
+
+             Table "cs421g03.song_artist"
+ Column |  Type   | Modifiers | Storage | Description
+--------+---------+-----------+---------+-------------
+ artid  | integer | not null  | plain   |
+ sid    | integer | not null  | plain   |
+Indexes:
+    "song_artist_pkey" PRIMARY KEY, btree (artid, sid)
+Foreign-key constraints:
+    "song_artist_artid_fkey" FOREIGN KEY (artid) REFERENCES artist(artid)
+    "song_artist_sid_fkey" FOREIGN KEY (sid) REFERENCES song(pid)
+Has OIDs: no
+
+
+
+            Table "cs421g03.album_artist"
+ Column |  Type   | Modifiers | Storage | Description
+--------+---------+-----------+---------+-------------
+ artid  | integer | not null  | plain   |
+ albid  | integer | not null  | plain   |
+Indexes:
+    "album_artist_pkey" PRIMARY KEY, btree (artid, albid)
+Foreign-key constraints:
+    "album_artist_albid_fkey" FOREIGN KEY (albid) REFERENCES album(pid)
+    "album_artist_artid_fkey" FOREIGN KEY (artid) REFERENCES artist(artid)
+Has OIDs: no
+
+
+
+                   Table "cs421g03.track"
+    Column    |  Type   | Modifiers | Storage | Description
+--------------+---------+-----------+---------+-------------
+ sid          | integer | not null  | plain   |
+ albid        | integer | not null  | plain   |
+ track_number | integer |           | plain   |
+Indexes:
+    "track_pkey" PRIMARY KEY, btree (sid)
+Foreign-key constraints:
+    "track_albid_fkey" FOREIGN KEY (albid) REFERENCES album(pid)
+    "track_sid_fkey" FOREIGN KEY (sid) REFERENCES song(pid)
+Has OIDs: no
+
+
+
+
+             Table "cs421g03.song_genre"
+ Column |  Type   | Modifiers | Storage | Description
+--------+---------+-----------+---------+-------------
+ genid  | integer | not null  | plain   |
+ sid    | integer | not null  | plain   |
+Indexes:
+    "song_genre_pkey" PRIMARY KEY, btree (genid, sid)
+Foreign-key constraints:
+    "song_genre_genid_fkey" FOREIGN KEY (genid) REFERENCES genre(genid)
+    "song_genre_sid_fkey" FOREIGN KEY (sid) REFERENCES song(pid)
+Has OIDs: no
+
+
+
+
+            Table "cs421g03.purchase_product"
+   Column   |  Type   | Modifiers | Storage | Description
+------------+---------+-----------+---------+-------------
+ purchaseid | integer | not null  | plain   |
+ pid        | integer | not null  | plain   |
+ cost       | money   | not null  | plain   |
+Indexes:
+    "purchase_product_pkey" PRIMARY KEY, btree (purchaseid, pid)
+Foreign-key constraints:
+    "purchase_product_pid_fkey" FOREIGN KEY (pid) REFERENCES product(pid)
+    "purchase_product_purchaseid_fkey" FOREIGN KEY (purchaseid) REFERENCES purchase(purchaseid)
+Has OIDs: no
+
+
+
+                 Table "cs421g03.rating"
+   Column   |  Type   | Modifiers | Storage | Description
+------------+---------+-----------+---------+-------------
+ pid        | integer | not null  | plain   |
+ cid        | integer | not null  | plain   |
+ rating_amt | integer | not null  | plain   |
+Indexes:
+    "rating_pkey" PRIMARY KEY, btree (pid, cid)
+Check constraints:
+    "rating_quantity" CHECK (rating_amt >= 1 AND rating_amt <= 5)
+Foreign-key constraints:
+    "rating_cid_fkey" FOREIGN KEY (cid) REFERENCES customer(cid)
+    "rating_pid_fkey" FOREIGN KEY (pid) REFERENCES product(pid) ON DELETE CASCADE
+Has OIDs: no
