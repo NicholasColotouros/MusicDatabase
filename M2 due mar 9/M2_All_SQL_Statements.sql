@@ -128,7 +128,8 @@ INSERT INTO format VALUES (1, 'mp3');
 INSERT INTO song VALUES (1, 'The First Song', '1999-02-25', 120, 'These are the lyrics to the first song!', 1, 1);
 INSERT INTO country VALUES (1, 'Canada', 1);
 
--- Q4
+-- Q4 (run Q3 as well)
+
 -- Languages
 INSERT INTO language VALUES (2, 'French');
 INSERT INTO language VALUES (3, 'German');
@@ -359,7 +360,6 @@ SELECT customer.cid, customer.firstname, customer.lastname FROM customer
 -- Q6
 
 -- 10% off on all products that are rated poorly
--- yes, I know this would be very easy to exploit IRL
 
 UPDATE product
 SET price = price - price/10
@@ -368,9 +368,8 @@ WHERE product.pid = ANY (
   FROM product, rating
   WHERE product.pid = rating.pid
     AND rating.rating_amt < 2
-)
+);
 
--- I haven't actually tested that this works
 -- updates the price of an album
 -- to the sum of the prices of its songs
 
@@ -383,9 +382,9 @@ FROM (
     AND track.sid = song.pid
   GROUP BY product.pid
 ) AS ps
-WHERE ps.pid = product.pid
+WHERE ps.pid = product.pid;
 
--- I haven't actually tested that this works
+
 -- lower a purchase amount by the customer's tax rate (a tax rebate)
 
 UPDATE purchase
@@ -393,9 +392,9 @@ SET price = price - price * country.tax_rate
 FROM customer
 INNER JOIN country
 ON customer.location_id = country.coid
-WHERE purchase.cid = customer.cid
+WHERE purchase.cid = customer.cid;
 
--- I haven't actually tested that this works
+
 -- remove all ratings from users who only give negative ratings ( < 3 )
 -- in large enough quantities ( > 100 )
 
@@ -410,7 +409,7 @@ WHERE rating.cid = ANY (
     GROUP BY customer.cid
   ) as neg_reviewers
   WHERE neg_reviews > 100
-)
+);
 
 -- Q7 VIEWS
 
@@ -448,6 +447,7 @@ INNER JOIN Album A ON HR.productID = A.pid
 ORDER BY HR.Rating;
 
 -- Q8 has been incorporated into the create table's
+-- they are explained and examples are provided below
 
 -- first is the strong password enforcement in customer
 -- strong password MUST have one lowercase alpha,
@@ -457,10 +457,11 @@ ORDER BY HR.Rating;
 
 -- example that will violate the constraint:
 
--- prep
+-- prep (assumes empty DB)
 INSERT INTO language VALUES (1, 'English');
 INSERT INTO country VALUES (1, 'UK', 1);
 
+-- actual example
 INSERT INTO customer VALUES
 (1, 'bob', 'stevenson', 'bob.s@email.com', NULL, NULL, 'notgoodpassword', 1, 1);
 
@@ -469,7 +470,7 @@ INSERT INTO customer VALUES
 
 -- example that will violate the constraint:
 
--- prep
+-- prep (assumes empty DB)
 INSERT INTO language VALUES (1, 'English');
 INSERT INTO country VALUES (1, 'UK', 1);
 INSERT INTO customer VALUES
@@ -478,9 +479,5 @@ INSERT INTO product VALUES (1, '$200.00');
 INSERT INTO format VALUES (1, 'mp3');
 INSERT INTO song VALUES (1, 'The First Song', '1999-02-25', 120, 'These are the lyrics to the first song!', 1, 1);
 
+-- actual example
 INSERT INTO rating VALUES (1, 1, 6);
-
--- DB CLEANUP STUFF, REMOVE FROM FINAL VERSION
-
-DROP SCHEMA PUBLIC CASCADE;
-CREATE SCHEMA PUBLIC;

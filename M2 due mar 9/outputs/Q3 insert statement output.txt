@@ -1,0 +1,15 @@
+==============================
+========= QUESTION 3 =========
+==============================
+INSERT INTO product VALUES (1, '$200.00');
+INSERT INTO language VALUES (1, 'English');
+INSERT INTO format VALUES (1, 'mp3');
+INSERT INTO song VALUES (1, 'The First Song', '1999-02-25', 120, 'These are the lyrics to the first song!', 1, 1);
+INSERT INTO country VALUES (1, 'Canada', 1);
+
+results in having the output:
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1

@@ -1,0 +1,53 @@
+-- This view represents the basic info a music player were to display
+-- if we had a preview of the song on the site
+CREATE VIEW SongPlayerInfo ( Song, Artist, Album, Genre, TrackNo)
+AS SELECT S.title, ART.name, ALB.name, G.name, T.track_number
+FROM song S
+INNER JOIN track T ON S.pid = T.sid
+INNER JOIN album ALB ON T.albid = ALB.pid
+INNER JOIN album_artist AR ON ALB.pid = AR.albid
+INNER JOIN artist ART ON AR.artid = ART.artid
+INNER JOIN song_genre SG ON S.pid = SG.sid
+INNER JOIN genre G ON SG.genid = G.genid;
+
+Response: CREATE VIEW
+
+-- let's say we want to feature the album 2112 in a music player
+SELECT * 
+FROM SongPlayerInfo
+WHERE Album = '2112'
+ORDER BY TrackNo ASC;
+
+Response:
+         song          | artist | album |      genre       | trackno
+-----------------------+--------+-------+------------------+---------
+ 2112                  | Rush   | 2112  | Progressive Rock |       1
+ A Passage to Bangkok  | Rush   | 2112  | Hard Rock        |       2
+ The Twilight Zone     | Rush   | 2112  | Hard Rock        |       3
+ Lessons               | Rush   | 2112  | Hard Rock        |       4
+ Tears                 | Rush   | 2112  | Hard Rock        |       5
+ Something for Nothing | Rush   | 2112  | Hard Rock        |       6
+
+
+-- This view returns the highest rated products which is something
+-- a lot of customers look at in stores
+CREATE VIEW HighestRatings ( ProductID, Rating )
+AS SELECT P.pid, AVG(R.rating_amt)
+FROM product P
+INNER JOIN rating R ON P.pid = R.pid
+GROUP BY P.pid
+ORDER BY 2, 1;
+
+Response: CREATE VIEW
+
+-- Let's say we want to get the highest rated albums
+SELECT A.name AS AlbumName, HR.Rating
+FROM HighestRatings HR
+INNER JOIN Album A ON HR.productID = A.pid
+ORDER BY HR.Rating;
+
+RESPONSE: 
+    albumname    |       rating
+-----------------+--------------------
+ Moving Pictures | 3.0000000000000000
+
