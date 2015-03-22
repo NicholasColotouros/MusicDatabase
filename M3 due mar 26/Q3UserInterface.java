@@ -1,6 +1,8 @@
 import java.sql.*;
 import java.util.Scanner;
 
+// Compile with: javac -classpath postgresql.jar Q3UserInterface.class
+	// assuming the postgresql jar is in the same folder as this
 public class Q3UserInterface
 {
 	private static final String MENU_TEXT = "Please selected one of the following options by number only:\n"
@@ -11,18 +13,18 @@ public class Q3UserInterface
 		+ "5) Look up a cool thing\n"
 		+ "6) Quit\n";
 
-
-	private static final String USERNAME = "cs421g03";
+	// TODO: check if this is right... it always hangs on connection
+	private static final String USERNAME = "CS421";
 	private static final String PASSWORD = "muvfoytt";
 
     public static void main ( String [ ] args ) throws SQLException
     {
-    	try
-    	{
-			Class.forName("org.postgresql.Driver"); // throws class not found...
+	   	try
+     	{
+		 	Class.forName("org.postgresql.Driver");
 		} catch(ClassNotFoundException e){e.printStackTrace();}
 	
-		String url = "jdbc:postgresql://db2:50000/cs421";
+		String url = "jdbc:postgresql://db2:50000/CS421";
 		Connection con = DriverManager.getConnection (url, USERNAME, PASSWORD) ;
 		Statement statement = con.createStatement ( ) ;
 
@@ -38,6 +40,7 @@ public class Q3UserInterface
 
 			switch(input)
 			{
+				// TODO
 				case 1:
 					break;
 				case 2:
@@ -46,12 +49,14 @@ public class Q3UserInterface
 					break;
 				case 5:
 					break;
+
 				default:
+					System.out.println("That is not a valid input, please try again");
 					break;
 			}
 		}
 
-		System.out.println("Goodbye.");
+		System.out.println("Connection successful. Disconnecting.");
 		con.close ( ) ;
     }
 
