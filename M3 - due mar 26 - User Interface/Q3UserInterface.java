@@ -1,5 +1,8 @@
+import java.math.BigDecimal;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 // Assuming the postgresql jar is in the same folder as this:
 	// Compile with: javac -classpath postgresql.jar Q3UserInterface.class
@@ -13,7 +16,7 @@ public class Q3UserInterface
 	private static final String MENU_TEXT = "\nPlease selected one of the following options by number:\n"
 		+ "1) Get basic information on an album\n"
 		+ "2) Do a fancy thing\n"
-		+ "3) Modify a thing\n"
+		+ "3) Update the price of an album\n"
 		+ "4) Add a thing\n"
 		+ "5) Look up a cool thing\n"
 		+ "6) Quit\n";
@@ -42,13 +45,15 @@ public class Q3UserInterface
 			// get selection from user
 			try
 			{
-				System.out.println("enter an integer");
 				input = KEYBOARD.nextInt();
-				KEYBOARD.nextLine();
 			} 
-			catch(java.util.InputMismatchException e)
+			catch(InputMismatchException e)
 			{ 
 				input = 2112; 
+			}
+			finally
+			{
+				KEYBOARD.nextLine();
 			}
 
 			// Act based on user selection
@@ -59,6 +64,9 @@ public class Q3UserInterface
 				getBasicAlbumInfo();
 				break;
 			case 2:
+				break;
+			case 3:
+				updateAlbumPrice();
 				break;
 			case 4:
 				break;
@@ -102,6 +110,61 @@ public class Q3UserInterface
     	}
     	catch(SQLException e)
     	{
+    		// shouldn't happen
+    		e.printStackTrace();
+    	}
+    }
+
+    // updates the price of an album
+    public static void updateAlbumPrice()
+    {
+    	// get input
+    	System.out.println("Please enter the album name:");
+    	String albumName = KEYBOARD.nextLine();
+
+    	System.out.println("Please enter the new price of the album:");
+    	double newPrice = -1.0;
+    	while( newPrice < 0)
+    	{
+    		try
+    		{
+    			newPrice = KEYBOARD.nextDouble();
+    			if(newPrice < 0)
+    				System.out.println("Please enter a non-negative price.");
+    		}
+    		catch( InputMismatchException e)
+    		{
+    			System.out.println("Please enter a valid price.");
+    		}
+    		finally
+    		{
+    			KEYBOARD.nextLine();
+    		}
+    	}
+
+    	DecimalFormat df = new DecimalFormat("#.00");
+    	newPrice = Double.parseDouble(df.format(newPrice));
+    	BigDecimal formattedPrice = new BigDecimal(newPrice);
+
+    	// execute the query
+    	String query = "UPDATE product SET price = ?"
+    					+" WHERE pid IN ( "
+						+" SELECT product.pid FROM product, album WHERE product.pid = album.pid AND album.name = ?"
+						+");";
+
+		try
+		{
+	    	PreparedStatement stmt = null;
+	    	stmt = con.prepareStatement(query);
+    		stmt.setBigDecimal(1, formattedPrice);
+    		stmt.setString(2, albumName);
+    		int results = stmt.executeUpdate(); // TODO: this causes an error, fix
+    		System.out.println("Successfully changed the price of " + results + " albums with the name " + albumName + ".");
+    		stmt.close();
+		}
+		catch(SQLException e)
+    	{
+    		// shouldn't happen
     		e.printStackTrace();
     	}
     }
