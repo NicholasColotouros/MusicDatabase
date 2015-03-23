@@ -75,14 +75,14 @@ CREATE TABLE purchase (
 );
 
 CREATE TABLE song_artist (
-  artid INT REFERENCES artist(artid) NOT NULL,
-  sid INT REFERENCES song(pid) NOT NULL,
-  PRIMARY KEY (artid, sid)
+  artid INT REFERENCES artist(artid) ON DELETE CASCADE NOT NULL,
+  sid INT REFERENCES song(pid) ON DELETE CASCADE NOT NULL,
+  PRIMARY KEY (artid, sid) 
 );
 
 CREATE TABLE album_artist (
-  artid INT REFERENCES artist(artid) NOT NULL,
-  albid INT REFERENCES album(pid) NOT NULL,
+  artid INT REFERENCES artist(artid) ON DELETE CASCADE NOT NULL,
+  albid INT REFERENCES album(pid) ON DELETE CASCADE NOT NULL,
   PRIMARY KEY (artid, albid)
 );
 
@@ -90,20 +90,20 @@ CREATE TABLE track (
   -- ASSUMPTION: song can only be in one album
   -- i.e. you *can* buy a song twice if it
   -- were to appear in two distinct albums
-  sid INT PRIMARY KEY REFERENCES song(pid) NOT NULL,
-  albid INT REFERENCES album(pid) NOT NULL,
+  sid INT PRIMARY KEY REFERENCES song(pid) ON DELETE CASCADE NOT NULL,
+  albid INT REFERENCES album(pid) ON DELETE CASCADE NOT NULL,
   track_number INT
 );
 
 CREATE TABLE song_genre (
   genid INT REFERENCES genre(genid) NOT NULL,
-  sid INT REFERENCES song(pid) NOT NULL,
+  sid INT REFERENCES song(pid) ON DELETE CASCADE NOT NULL,
   PRIMARY KEY (genid, sid)
 );
 
 CREATE TABLE purchase_product (
   purchaseid INT REFERENCES purchase(purchaseid) NOT NULL,
-  pid INT REFERENCES product(pid) NOT NULL,
+  pid INT REFERENCES product(pid) ON DELETE CASCADE NOT NULL,
   cost MONEY NOT NULL,
   PRIMARY KEY (purchaseid, pid)
 );
