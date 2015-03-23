@@ -8,7 +8,7 @@ import java.util.InputMismatchException;
 
 // Assuming the postgresql jar is in the same folder as this:
     // Compile with: javac -classpath postgresql.jar Q3UserInterface.class
-    // Then run with: java -classpath postgresql.jar Q3UserInterface
+    // Then run with: java -classpath postgresql.jar:. Q3UserInterface
 public class Q3UserInterface
 {
     private static Connection con;
@@ -199,7 +199,7 @@ public class Q3UserInterface
 
     }
 
-    // TODO: fix the cascade statements for this to work (they're backwards)
+    // TODO: TEST
     // Removes all artists by a given name and their associated products (albums/songs)
     public static void removeArtistAndDiscography()
     {
@@ -234,7 +234,6 @@ public class Q3UserInterface
                 removedProducts += stmt.executeUpdate();
                 stmt.close();
             }
-
             // delete the artists
             for(Integer artistID : artistIDs)
             {
@@ -250,8 +249,5 @@ public class Q3UserInterface
             // shouldn't happen
             e.printStackTrace();
         }
-        // TODO: remove all albums by that artist
-        // make sure it cascades into tracks and songs
-        // then remove the artist and print out how many products were removed
     }
 }
