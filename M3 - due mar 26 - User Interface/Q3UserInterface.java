@@ -199,7 +199,6 @@ public class Q3UserInterface
 
     }
 
-    // TODO: TEST
     // Removes all artists by a given name and their associated products (albums/songs)
     public static void removeArtistAndDiscography()
     {
@@ -214,16 +213,16 @@ public class Q3UserInterface
         {
             // get the matching artists
             PreparedStatement stmt = null;
-            stmt = con.prepareStatement("SELECT * FROM artist WHERE name = ?");
+            stmt = con.prepareStatement("SELECT artid FROM artist WHERE name = ?");
             stmt.setString(1, artist);
             ResultSet results = stmt.executeQuery();
-            stmt.close();
-
+           
             while(results.next())
             {
                 int artID = results.getInt("artid");
                 artistIDs.add(new Integer(artID));
             }
+            stmt.close();
 
             // delete all associated products
             String query = "DELETE FROM album WHERE album.pid IN (SELECT album_artist.albid FROM album_artist WHERE album_artist.artid = ?);";
@@ -242,7 +241,7 @@ public class Q3UserInterface
                 removedArtists += stmt.executeUpdate();
                 stmt.close();
             }
-            System.out.println("Removed " + removedArtists + " artists by the name of " + artist + " and " + removedProducts + " associated products");
+            System.out.println("Removed " + removedArtists + " artists by the name of " + artist + " and " + removedProducts + " associated albums");
         }
         catch(SQLException e)
         {
