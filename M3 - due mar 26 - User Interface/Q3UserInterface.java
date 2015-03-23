@@ -15,10 +15,10 @@ public class Q3UserInterface
 
 	private static final String MENU_TEXT = "\nPlease selected one of the following options by number:\n"
 		+ "1) Get basic information on an album\n"
-		+ "2) Do a fancy thing\n"
+		+ "2) 10% off all poorly rated products\n"
 		+ "3) Update the price of an album\n"
-		+ "4) Add a thing\n"
-		+ "5) Look up a cool thing\n"
+		+ "4) Add an artist\n" //TODO: Then need to add a song and album
+		+ "5) An artist has requested their removal from the database\n" // TODO
 		+ "6) Quit\n";
 
 	private static final String USERNAME = "cs421g03";
@@ -64,6 +64,7 @@ public class Q3UserInterface
 				getBasicAlbumInfo();
 				break;
 			case 2:
+				beginSale();
 				break;
 			case 3:
 				updateAlbumPrice();
@@ -106,6 +107,25 @@ public class Q3UserInterface
 
     			System.out.printf("Song: %s\nArtist: %s\nGenre: %s\nTrackNo: %d\n%n", song, artist, album, track);
     		}
+    		stmt.close();
+    	}
+    	catch(SQLException e)
+    	{
+    		// shouldn't happen
+    		e.printStackTrace();
+    	}
+    }
+
+    public static void beginSale()
+    {
+    	String query = "UPDATE product SET price = price - price/10 WHERE product.pid = ANY ( SELECT product.pid FROM product, rating WHERE product.pid = rating.pid AND rating.rating_amt < 2);";
+
+    	try
+    	{
+	    	PreparedStatement stmt = null;
+	    	stmt = con.prepareStatement(query);
+    		int results = stmt.executeUpdate();
+    		System.out.println(results + " products are now 10% off.");
     		stmt.close();
     	}
     	catch(SQLException e)
