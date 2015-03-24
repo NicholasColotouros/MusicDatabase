@@ -193,10 +193,53 @@ public class Q3UserInterface
         }
     }
 
-    // TODO
+    // TODO finish and test
     public static void addArtist()
     {
+        System.out.println("Please enter the name of the artist to be added");
+        String artistName = KEYBOARD.nextLine();
+        while(artistName.equals(""))
+        {
+            System.out.println("Please enter a valid artist name.");
+        }
+        if(artistName.length() >= 99)
+        {
+            artistName = artistName.substring(0, 99);
+        }
 
+        System.out.println("Please enter a description for the artist.");
+        String artistDescription = KEYBOARD.nextLine();
+
+        boolean nullDate = false;
+        System.out.println("Please input the year the artist was formed. An invalid input will be considered to leave the field empty");
+        int year = getDateInput();
+        System.out.println("Please input the month the artist was formed. An invalid input will be considered to leave the field empty");
+        int month = getDateInput();
+        System.out.println("Please input the year the artist was formed. An invalid input will be considered to leave the field empty");
+        int day   = getDateInput();
+        // TODO: check validity of day
+        if(year < 1000 || year > 9999 || month < 1 || month > 12)
+            nullDate = true;
+
+        // TODO: insert artist into table
+    }
+
+    private static int getDateInput()
+    {
+        int input = -1;
+        try
+        {
+            input = KEYBOARD.nextInt();
+        } 
+        catch(InputMismatchException e)
+        { 
+            input = -1; 
+        }
+        finally
+        {
+            KEYBOARD.nextLine();
+        }
+        return input;
     }
 
     // Removes all artists by a given name and their associated products (albums/songs)
