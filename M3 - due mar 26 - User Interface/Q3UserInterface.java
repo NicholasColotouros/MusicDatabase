@@ -7,9 +7,8 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 
 // Assuming the postgresql jar is in the same folder as this:
-// Compile with: javac -classpath postgresql.jar Q3UserInterface.java
-// Then run with: java -classpath postgresql.jar:. Q3UserInterface
-// for windows, do java -classpath postgresql.jar;. Q3UserInterface
+    // Compile with: javac -classpath postgresql.jar Q3UserInterface.java
+    // Then run with: java -classpath postgresql.jar:. Q3UserInterface
 public class Q3UserInterface
 {
     private static Connection con;
@@ -22,7 +21,7 @@ public class Q3UserInterface
         + "3) Update the price of an album\n"
         + "4) Find the number of songs by country and extension\n"
         + "5) Remove artist and all associated products from the database\n"
-        + "6) Add indices to the database\n"
+	+ "6) Add indices to the database\n"
         + "7) Quit\n";
 
     private static final String USERNAME = "cs421g03";
@@ -286,7 +285,6 @@ public class Q3UserInterface
         }
     }
 
-    //TODO : test
     // Runs queries before and after adding indices to see speed up
     public static void addIndices()
     {
@@ -294,7 +292,7 @@ public class Q3UserInterface
     	// this is query 1 from Q5 of Milestone 2
         String genreNameQuery = "SELECT genre.genid, genre.name, COUNT(Genre.genid) FROM genre JOIN song_genre ON genre.genid = song_genre.genid JOIN song ON song_genre.sid = song.pid JOIN product ON song.pid = product.pid JOIN purchase_product ON purchase_product.pid = product.pid GROUP BY genre.genid, genre.name;";
         // this is query 3 from Q5 of Milestone 2
-        String artistNameQuery = "SELECT artist.name, AVG(rating_amt) FROM artist JOIN song_artist ON artist.artid = song_artist.artist JOIN song ON song_artist.sid = song.pid JOIN rating ON rating.pid = song.pid GROUP BY artist.name;";
+        String artistNameQuery = "SELECT artist.name, AVG(rating_amt) FROM artist JOIN song_artist ON artist.artid = song_artist.artid JOIN song ON song_artist.sid = song.pid JOIN rating ON rating.pid = song.pid GROUP BY artist.name;";
         
         
         String createGenreNameIndex = "CREATE INDEX genrename ON genre(name);";
@@ -309,8 +307,8 @@ public class Q3UserInterface
         // first try deleting indices if they already exist
         try
         {         
-        	PreparedStatement stmt = null;
-        	stmt = con.prepareStatement(deleteGenreNameIndex);
+	     PreparedStatement stmt = null;
+            stmt = con.prepareStatement(deleteGenreNameIndex);
             int results = stmt.executeUpdate(); 
             stmt.close();
          
@@ -325,41 +323,44 @@ public class Q3UserInterface
         
         try
         {
+            System.out.println("Query 1: ");
+	     System.out.println(genreNameQuery);
             PreparedStatement stmt = null;
             stmt = con.prepareStatement(genreNameQuery);
             beforeExecution = System.currentTimeMillis();
-            int results = stmt.executeUpdate(); 
+            stmt.executeQuery(); 
             afterExecution = System.currentTimeMillis();
-            System.out.println("Query 1 took " + (afterExecution - beforeExecution) + "seconds to complete before adding indices.");
+            System.out.println("Query 1 took " + (afterExecution - beforeExecution) + "miliseconds to complete before adding indices.");
             
             stmt = con.prepareStatement(createGenreNameIndex);
-            results = stmt.executeUpdate(); 
+            stmt.executeUpdate(); 
             System.out.println("Index on genre.name added.");
             stmt.close();
             
             stmt = con.prepareStatement(genreNameQuery);
             beforeExecution = System.currentTimeMillis();
-            results = stmt.executeUpdate(); 
+            stmt.executeQuery(); 
             afterExecution = System.currentTimeMillis();
-            System.out.println("Query 1 took " + (afterExecution - beforeExecution) + "seconds to complete after adding indices.");
+            System.out.println("Query 1 took " + (afterExecution - beforeExecution) + "miliseconds to complete after adding indices.");
             
-            
+            System.out.println("Query 2: ");
+	     System.out.println(artistNameQuery);            
             stmt = con.prepareStatement(artistNameQuery);
             beforeExecution = System.currentTimeMillis();
-            results = stmt.executeUpdate(); 
+            stmt.executeQuery(); 
             afterExecution = System.currentTimeMillis();
-            System.out.println("Query 2 took " + (afterExecution - beforeExecution) + "seconds to complete before adding indices.");
+            System.out.println("Query 2 took " + (afterExecution - beforeExecution) + "miliseconds to complete before adding indices.");
             
             stmt = con.prepareStatement(createArtistNameIndex);
-            results = stmt.executeUpdate(); 
+            stmt.executeUpdate(); 
             System.out.println("Index on artist.name added.");
             stmt.close();
             
             stmt = con.prepareStatement(artistNameQuery);
             beforeExecution = System.currentTimeMillis();
-            results = stmt.executeUpdate(); 
+            stmt.executeQuery(); 
             afterExecution = System.currentTimeMillis();
-            System.out.println("Query 2 took " + (afterExecution - beforeExecution) + "seconds to complete after adding indices.");
+            System.out.println("Query 2 took " + (afterExecution - beforeExecution) + "miliseconds to complete after adding indices.");
         }
         catch(SQLException e)
         {
