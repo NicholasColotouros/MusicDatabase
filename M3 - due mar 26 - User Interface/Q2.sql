@@ -17,11 +17,32 @@ BEGIN
         END IF;
     END LOOP;
 RETURN song_count;
+
 END;
 $$ LANGUAGE plpgsql;
 
 
+CREATE FUNCTION create_songs_extension_by_country(extension_name varchar) RETURNS void AS $$
+DECLARE
+    country_names CURSOR FOR
+    SELECT country.name FROM country;
+BEGIN
+
+    EXECUTE 'DROP TABLE IF EXISTS extension_songs_by_country';
+    EXECUTE 'CREATE TABLE extension_songs_by_country(cname varchar(50), song_count int)';
+    
+    FOR recordvar IN country_names LOOP
+            INSERT INTO extension_songs_by_country VALUES(recordvar.name, country_stats_by_extension(extension_name, recordvar.name));
+    END LOOP;
+
+END;
+$$ LANGUAGE plpgsql;
+
+-- example of value-returning function
 SELECT country_stats_by_extension('mp3', 'United Kingdom');
 
--- includes: CURSOR, PARAMS, LOCAL VAR, MULTIPLE SQL, LOOPS
--- thus conforms to specs afaik
+--example of table-creating function
+SELECT create_songs_extension_by_country('mp3');
+SELECT * FROM extension_songs_by_country;
+
+-- these storedproc's include: CURSORS, PARAMS, LOCAL VARS, MULTIPLE SQL, LOOPS, CREATING RELATIONS
