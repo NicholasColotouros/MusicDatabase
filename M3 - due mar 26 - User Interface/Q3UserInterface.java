@@ -19,7 +19,7 @@ public class Q3UserInterface
         + "1) Get basic information on an album\n"
         + "2) 10% off all poorly rated products\n"
         + "3) Update the price of an album\n"
-        + "4) Find songs by country and extension\n"
+        + "4) Find the number of songs by country and extension\n"
         + "5) Remove artist and all associated products from the database\n"
 	+ "6) Add indices to the database\n"
         + "7) Quit\n";
@@ -72,7 +72,7 @@ public class Q3UserInterface
                 updateAlbumPrice();
                 break;
             case 4:
-                findSongsByCountryAndExtension();
+                numberOfSongsByExtensionAndCountry();
                 break;
             case 5:
                 removeArtistAndDiscography();
@@ -195,7 +195,7 @@ public class Q3UserInterface
     }
 
     // TODO finish and test
-    public static void findSongsByCountryAndExtension()
+    public static void numberOfSongsByExtensionAndCountry()
     {
         System.out.println("Please enter the extension type:");
         String ext = KEYBOARD.nextLine();
@@ -203,62 +203,35 @@ public class Q3UserInterface
         System.out.println("Please enter the country:");
         String country = KEYBOARD.nextLine();
 
-        String formatQuery = "SELECT song.title FROM song "
-            + "INNER JOIN song_artist ON song.pid = song_artist.sid "
-            + "INNER JOIN artist ON artist.artid = song_artist.artid "
-            + "INNER JOIN country ON country.coid = artist.location_of_origin_id "
-            + "INNER JOIN format ON format.fid = song.format_id "
-            + "WHERE format.extension = ?;";
+        String query1 = "SELECT create_songs_extension_by_country(?);";
+        String query2 = "SELECT song_count FROM extension_songs_by_country WHERE cname = ?";
 
-        String countryQuery = "SELECT song.title FROM song "
-            + "INNER JOIN song_artist ON song.pid = song_artist.sid "
-            + "INNER JOIN artist ON artist.artid = song_artist.artid "
-            + "INNER JOIN country ON country.coid = artist.location_of_origin_id AND country.name = ?;";
 
         int numResults = 0;
-        ArrayList<String> resultNames = new ArrayList<String>();
 
         try
         {
-            ArrayList<String> songTitles = new ArrayList<String>();
-
             // query1
             PreparedStatement stmt = null;
-            stmt = con.prepareStatement(formatQuery);
+            stmt = con.prepareStatement(query1);
             stmt.setString(1, ext);
             ResultSet results = stmt.executeQuery();
-
-            while(results.next())
-            {
-                String songTitle = results.getString("title");
-                songTitles.add(songTitle);
-            }
             stmt.close();
 
             // query2
-            stmt = con.prepareStatement(countryQuery);
+            stmt = con.prepareStatement(query2);
             stmt.setString(1, country);
             results = stmt.executeQuery();
 
             while(results.next())
             {
-                String songTitle = results.getString("title");
-
-                if(songTitles.contains(songTitle))
-                {
-                    numResults++;
-                    resultNames.add(songTitle);
-                }
+                numResults += results.getInt("song_count");
             }
+            stmt.close();
 
         } catch(SQLException e){e.printStackTrace();}
 
-        System.out.println("\nFound " + numResults + " results:");
-        for(String s : resultNames)
-        {
-            System.out.println(s);
-        }
-        System.out.println(" ");
+        System.out.println(numResults + " songs found of format" + ext + " from " + country + ".\n");
     }
 
     // Removes all artists by a given name and their associated products (albums/songs)
