@@ -7,8 +7,9 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 
 // Assuming the postgresql jar is in the same folder as this:
-    // Compile with: javac -classpath postgresql.jar Q3UserInterface.java
-    // Then run with: java -classpath postgresql.jar:. Q3UserInterface
+// Compile with: javac -classpath postgresql.jar Q3UserInterface.java
+// Then run with: java -classpath postgresql.jar:. Q3UserInterface
+// for windows, do java -classpath postgresql.jar;. Q3UserInterface
 public class Q3UserInterface
 {
     private static Connection con;
@@ -21,7 +22,7 @@ public class Q3UserInterface
         + "3) Update the price of an album\n"
         + "4) Find the number of songs by country and extension\n"
         + "5) Remove artist and all associated products from the database\n"
-	+ "6) Add indices to the database\n"
+        + "6) Add indices to the database\n"
         + "7) Quit\n";
 
     private static final String USERNAME = "cs421g03";
@@ -34,7 +35,7 @@ public class Q3UserInterface
             Class.forName("org.postgresql.Driver");
         } catch(ClassNotFoundException e){e.printStackTrace();}
     
-        String url = "jdbc:postgresql://db2/CS421";
+        String url = "jdbc:postgresql://db2.cs.mcgill.ca/CS421";
         con = DriverManager.getConnection (url, USERNAME, PASSWORD) ;
 
         // Interface starts here
