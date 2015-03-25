@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 
 // Assuming the postgresql jar is in the same folder as this:
-    // Compile with: javac -classpath postgresql.jar Q3UserInterface.class
+    // Compile with: javac -classpath postgresql.jar Q3UserInterface.java
     // Then run with: java -classpath postgresql.jar:. Q3UserInterface
 public class Q3UserInterface
 {
@@ -21,7 +21,8 @@ public class Q3UserInterface
         + "3) Update the price of an album\n"
         + "4) Find songs by country and extension\n"
         + "5) Remove artist and all associated products from the database\n"
-        + "6) Quit\n";
+	+ "6) Add indices to the database\n"
+        + "7) Quit\n";
 
     private static final String USERNAME = "cs421g03";
     private static final String PASSWORD = "muvfoytt";
@@ -40,7 +41,7 @@ public class Q3UserInterface
         System.out.println("Welcome back, " + USERNAME);
 
         int input = -1;
-        while(input != 6)
+        while(input != 7)
         {
             System.out.println(MENU_TEXT);
 
@@ -76,7 +77,10 @@ public class Q3UserInterface
             case 5:
                 removeArtistAndDiscography();
                 break;
-            case 6:
+	    case 6:
+		addIndices();
+		break;
+            case 7:
                 System.out.println("Goodbye.");
                 break;
             default:
@@ -300,6 +304,86 @@ public class Q3UserInterface
                 stmt.close();
             }
             System.out.println("Removed " + removedArtists + " artists by the name of " + artist + " and " + removedProducts + " associated albums");
+        }
+        catch(SQLException e)
+        {
+            // shouldn't happen
+            e.printStackTrace();
+        }
+    }
+
+    public static void addIndices()
+    {
+    	System.out.println("Testing the effect of two indices on two queries: ");
+    	// this is query 1 from Q5 of Milestone 2
+        String genreNameQuery = "SELECT genre.genid, genre.name, COUNT(Genre.genid) FROM genre JOIN song_genre ON genre.genid = song_genre.genid JOIN song ON song_genre.sid = song.pid JOIN product ON song.pid = product.pid JOIN purchase_product ON purchase_product.pid = product.pid GROUP BY genre.genid, genre.name;";
+        // this is query 3 from Q5 of Milestone 2
+        String artistNameQuery = "SELECT artist.name, AVG(rating_amt) FROM artist JOIN song_artist ON artist.artid = song_artist.artist JOIN song ON song_artist.sid = song.pid JOIN rating ON rating.pid = song.pid GROUP BY artist.name;";
+        
+        
+        String createGenreNameIndex = "CREATE INDEX genrename ON genre(name);";
+        String createArtistNameIndex = "CREATE INDEX artistname ON artist(name);";
+        
+        String deleteGenreNameIndex = "DROP INDEX genrename;";
+        String deleteArtistNameIndex = "DROP INDEX artistname;";
+        
+        long beforeExecution;
+        long afterExecution;
+       
+        // first try deleting indices if they already exist
+        try
+        {         
+        	PreparedStatement stmt = null;
+        	stmt = con.prepareStatement(deleteGenreNameIndex);
+            int results = stmt.executeUpdate(); 
+            stmt.close();
+         
+            stmt = con.prepareStatement(deleteArtistNameIndex);
+            results = stmt.executeUpdate(); 
+            stmt.close();
+        }
+        catch(SQLException e)
+        {
+
+        }        
+        
+        try
+        {
+            PreparedStatement stmt = null;
+            stmt = con.prepareStatement(genreNameQuery);
+            beforeExecution = System.currentTimeMillis();
+            int results = stmt.executeUpdate(); 
+            afterExecution = System.currentTimeMillis();
+            System.out.println("Query 1 took " + (afterExecution - beforeExecution) + "seconds to complete before adding indices.");
+            
+            stmt = con.prepareStatement(createGenreNameIndex);
+            results = stmt.executeUpdate(); 
+            System.out.println("Index on genre.name added.");
+            stmt.close();
+            
+            stmt = con.prepareStatement(genreNameQuery);
+            beforeExecution = System.currentTimeMillis();
+            results = stmt.executeUpdate(); 
+            afterExecution = System.currentTimeMillis();
+            System.out.println("Query 1 took " + (afterExecution - beforeExecution) + "seconds to complete after adding indices.");
+            
+            
+            stmt = con.prepareStatement(artistNameQuery);
+            beforeExecution = System.currentTimeMillis();
+            results = stmt.executeUpdate(); 
+            afterExecution = System.currentTimeMillis();
+            System.out.println("Query 2 took " + (afterExecution - beforeExecution) + "seconds to complete before adding indices.");
+            
+            stmt = con.prepareStatement(createArtistNameIndex);
+            results = stmt.executeUpdate(); 
+            System.out.println("Index on artist.name added.");
+            stmt.close();
+            
+            stmt = con.prepareStatement(artistNameQuery);
+            beforeExecution = System.currentTimeMillis();
+            results = stmt.executeUpdate(); 
+            afterExecution = System.currentTimeMillis();
+            System.out.println("Query 2 took " + (afterExecution - beforeExecution) + "seconds to complete after adding indices.");
         }
         catch(SQLException e)
         {
