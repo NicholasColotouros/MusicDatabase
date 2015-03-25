@@ -249,7 +249,7 @@ public class Q3UserInterface
 
         } catch(SQLException e){e.printStackTrace();}
 
-        System.out.println("\nFound " + numResults + "results:");
+        System.out.println("\nFound " + numResults + " results:");
         for(String s : resultNames)
         {
             System.out.println(s);
