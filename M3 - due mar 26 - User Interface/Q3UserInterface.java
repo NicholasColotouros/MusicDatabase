@@ -9,6 +9,7 @@ import java.util.InputMismatchException;
 // Assuming the postgresql jar is in the same folder as this:
     // Compile with: javac -classpath postgresql.jar Q3UserInterface.java
     // Then run with: java -classpath postgresql.jar:. Q3UserInterface
+    // for windows, do java -classpath postgresql.jar;. Q3UserInterface
 public class Q3UserInterface
 {
     private static Connection con;
@@ -330,7 +331,7 @@ public class Q3UserInterface
             beforeExecution = System.currentTimeMillis();
             stmt.executeQuery(); 
             afterExecution = System.currentTimeMillis();
-            System.out.println("Query 1 took " + (afterExecution - beforeExecution) + "miliseconds to complete before adding indices.");
+            System.out.println("Query 1 took " + (afterExecution - beforeExecution) + " miliseconds to complete before adding indices.");
             
             stmt = con.prepareStatement(createGenreNameIndex);
             stmt.executeUpdate(); 
@@ -341,7 +342,7 @@ public class Q3UserInterface
             beforeExecution = System.currentTimeMillis();
             stmt.executeQuery(); 
             afterExecution = System.currentTimeMillis();
-            System.out.println("Query 1 took " + (afterExecution - beforeExecution) + "miliseconds to complete after adding indices.");
+            System.out.println("Query 1 took " + (afterExecution - beforeExecution) + " miliseconds to complete after adding indices.");
             
             System.out.println("Query 2: ");
 	     System.out.println(artistNameQuery);            
@@ -349,7 +350,7 @@ public class Q3UserInterface
             beforeExecution = System.currentTimeMillis();
             stmt.executeQuery(); 
             afterExecution = System.currentTimeMillis();
-            System.out.println("Query 2 took " + (afterExecution - beforeExecution) + "miliseconds to complete before adding indices.");
+            System.out.println("Query 2 took " + (afterExecution - beforeExecution) + " miliseconds to complete before adding indices.");
             
             stmt = con.prepareStatement(createArtistNameIndex);
             stmt.executeUpdate(); 
@@ -360,7 +361,7 @@ public class Q3UserInterface
             beforeExecution = System.currentTimeMillis();
             stmt.executeQuery(); 
             afterExecution = System.currentTimeMillis();
-            System.out.println("Query 2 took " + (afterExecution - beforeExecution) + "miliseconds to complete after adding indices.");
+            System.out.println("Query 2 took " + (afterExecution - beforeExecution) + " miliseconds to complete after adding indices.");
         }
         catch(SQLException e)
         {
