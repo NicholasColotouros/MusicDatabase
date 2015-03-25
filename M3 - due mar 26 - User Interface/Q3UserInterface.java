@@ -312,6 +312,8 @@ public class Q3UserInterface
         }
     }
 
+    //TODO : test
+    // Runs queries before and after adding indices to see speed up
     public static void addIndices()
     {
     	System.out.println("Testing the effect of two indices on two queries: ");
