@@ -164,6 +164,8 @@ INSERT INTO product VALUES ( 12, '$2.40');
 INSERT INTO product VALUES ( 13, '$2.30');
 INSERT INTO product VALUES ( 14, '$2.20');
 INSERT INTO product VALUES ( 15, '$1.10');
+INSERT INTO product VALUES ( 16, '$1.10');
+INSERT INTO product VALUES ( 17, '$1.10');
 
 -- Songs
 INSERT INTO song VALUES ( 2, '2112', '1976-02-01', 121, 'And the meek shall inherit the Earth...', 1, 1);
@@ -179,11 +181,13 @@ INSERT INTO song VALUES ( 11, 'YYZ', '1980-10-01', 747, null, 1, 1);
 INSERT INTO song VALUES ( 12, 'Limelight', '1980-10-01', 120, 'Living on a lighted stages approaches the unreal...', 1, 1);
 INSERT INTO song VALUES ( 13, 'Witch Hunt', '1980-10-01', 100, 'The night is black, without a moon...', 1, 1);
 INSERT INTO song VALUES ( 14, 'Vital Signs', '1980-10-01', 120, 'Unstable condition. A sympton of life...', 1, 1);
+INSERT INTO song VALUES ( 16, 'Not a Rush Song', '1984-10-01', 121, 'Blahblah', 1, 1);
+INSERT INTO song VALUES ( 17, 'Another song that is not a rush song', '1981-10-01', 122, 'Blahblahblah', 1, 1);
 
 -- Artists
 INSERT INTO artist VALUES ( 1, 'Rush', 'A Canadian power trio formed in Toronto, Ontario', '1968-08-01', 1);
 INSERT INTO artist VALUES ( 2, 'Triumph', 'A Canadian power trio formed in Mississauga, Ontario', '1975-08-01', 1);
-INSERT INTO artist VALUES ( 3, 'Genesis', 'An English rock band known for members such as Peter Gabriel and Phil Colline', '1967-01-01', 1);
+INSERT INTO artist VALUES ( 3, 'Genesis', 'An English rock band known for members such as Peter Gabriel and Phil Colline', '1967-01-01', 4);
 INSERT INTO artist VALUES ( 4, 'AC/DC', 'aalsidhf kosdv diofgre cifg', '1973-11-01', 3);
 INSERT INTO artist VALUES ( 5, 'Rammstein', 'dndng aifgn akg alha', '1994-01-01', 5);
 
@@ -217,6 +221,9 @@ INSERT INTO song_artist VALUES ( 1, 11);
 INSERT INTO song_artist VALUES ( 1, 12);
 INSERT INTO song_artist VALUES ( 1, 13);
 INSERT INTO song_artist VALUES ( 1, 14);
+
+INSERT INTO song_artist VALUES ( 3, 15);
+INSERT INTO song_artist VALUES ( 3, 16);
 
 -- album artist
 INSERT INTO album_artist VALUES (1, 8);
@@ -252,6 +259,7 @@ INSERT INTO song_genre VALUES ( 1, 12);
 INSERT INTO song_genre VALUES ( 1, 13);
 INSERT INTO song_genre VALUES ( 1, 14);
 
+SET DATESTYLE TO MDY;
 -- customers
 INSERT INTO customer (cid,firstname,lastname,email,credit_card_number,birthdate,password,location_id,language_id) VALUES 
 (1,'Paloma','Webster','ac@Utsemper.ca','4108672824362294','08/28/15','IGU00ERj8JTa!',6,5),
@@ -319,6 +327,8 @@ INSERT INTO "rating" (pid,cid,rating_amt) VALUES (9,7,2);
 INSERT INTO "rating" (pid,cid,rating_amt) VALUES (12,8,3);
 INSERT INTO "rating" (pid,cid,rating_amt) VALUES (2,4,2);
 INSERT INTO "rating" (pid,cid,rating_amt) VALUES (6,7,1);
+
+SET DATESTYLE TO ISO;
 
 -- Q5
 
