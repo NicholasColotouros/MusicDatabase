@@ -23,5 +23,5 @@ $$ LANGUAGE plpgsql;
 
 SELECT country_stats_by_extension('mp3', 'United Kingdom');
 
--- includes: COUNTER, PARAMS, LOCAL VAR, MULTIPLE SQL, LOOPS
+-- includes: CURSOR, PARAMS, LOCAL VAR, MULTIPLE SQL, LOOPS
 -- thus conforms to specs afaik
