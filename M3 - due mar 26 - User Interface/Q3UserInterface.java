@@ -19,8 +19,8 @@ public class Q3UserInterface
         + "1) Get basic information on an album\n"
         + "2) 10% off all poorly rated products\n"
         + "3) Update the price of an album\n"
-        + "4) Add an artist\n" //TODO: Then need to add a song and album
-        + "5) An artist has requested their removal from the database\n" // TODO
+        + "4) Find songs by country and extension\n"
+        + "5) Remove artist and all associated products from the database\n"
         + "6) Quit\n";
 
     private static final String USERNAME = "cs421g03";
@@ -71,7 +71,7 @@ public class Q3UserInterface
                 updateAlbumPrice();
                 break;
             case 4:
-                addArtist();
+                findSongsByCountryAndExtension();
                 break;
             case 5:
                 removeArtistAndDiscography();
@@ -80,7 +80,7 @@ public class Q3UserInterface
                 System.out.println("Goodbye.");
                 break;
             default:
-                System.out.println("That is not a valid input, please try again");
+                System.out.println("That is not a valid input, please try again.");
                 break;
             }
             System.out.println(" ");
@@ -167,11 +167,9 @@ public class Q3UserInterface
         }
 
         DecimalFormat df = new DecimalFormat("#.00");
-        newPrice = Double.parseDouble(df.format(newPrice));
-        BigDecimal formattedPrice = new BigDecimal(newPrice);
 
         // execute the query
-        String query = "UPDATE product SET price = ?"
+        String query = "UPDATE product SET price = \'" + df.format(newPrice) + "\'"
                         +" WHERE pid IN ( "
                         +" SELECT product.pid FROM product, album WHERE product.pid = album.pid AND album.name = ?"
                         +");";
@@ -180,9 +178,8 @@ public class Q3UserInterface
         {
             PreparedStatement stmt = null;
             stmt = con.prepareStatement(query);
-            stmt.setBigDecimal(1, formattedPrice);
-            stmt.setString(2, albumName);
-            int results = stmt.executeUpdate(); // TODO: this causes an error, fix
+            stmt.setString(1, albumName);
+            int results = stmt.executeUpdate();
             System.out.println("Successfully changed the price of " + results + " albums with the name " + albumName + ".");
             stmt.close();
         }
@@ -194,52 +191,70 @@ public class Q3UserInterface
     }
 
     // TODO finish and test
-    public static void addArtist()
+    public static void findSongsByCountryAndExtension()
     {
-        System.out.println("Please enter the name of the artist to be added");
-        String artistName = KEYBOARD.nextLine();
-        while(artistName.equals(""))
-        {
-            System.out.println("Please enter a valid artist name.");
-        }
-        if(artistName.length() >= 99)
-        {
-            artistName = artistName.substring(0, 99);
-        }
+        System.out.println("Please enter the extension type:");
+        String ext = KEYBOARD.nextLine();
 
-        System.out.println("Please enter a description for the artist.");
-        String artistDescription = KEYBOARD.nextLine();
+        System.out.println("Please enter the country:");
+        String country = KEYBOARD.nextLine();
 
-        boolean nullDate = false;
-        System.out.println("Please input the year the artist was formed. An invalid input will be considered to leave the field empty");
-        int year = getDateInput();
-        System.out.println("Please input the month the artist was formed. An invalid input will be considered to leave the field empty");
-        int month = getDateInput();
-        System.out.println("Please input the year the artist was formed. An invalid input will be considered to leave the field empty");
-        int day   = getDateInput();
-        // TODO: check validity of day
-        if(year < 1000 || year > 9999 || month < 1 || month > 12)
-            nullDate = true;
+        String formatQuery = "SELECT song.title FROM song "
+            + "INNER JOIN song_artist ON song.pid = song_artist.sid "
+            + "INNER JOIN artist ON artist.artid = song_artist.artid "
+            + "INNER JOIN country ON country.coid = artist.location_of_origin_id "
+            + "INNER JOIN format ON format.fid = song.format_id "
+            + "WHERE format.extension = ?;";
 
-        // TODO: insert artist into table
-    }
+        String countryQuery = "SELECT song.title FROM song "
+            + "INNER JOIN song_artist ON song.pid = song_artist.sid "
+            + "INNER JOIN artist ON artist.artid = song_artist.artid "
+            + "INNER JOIN country ON country.coid = artist.location_of_origin_id AND country.name = ?;";
 
-    private static int getDateInput()
-    {
-        int input = -1;
+        int numResults = 0;
+        ArrayList<String> resultNames = new ArrayList<String>();
+
         try
         {
-            input = KEYBOARD.nextInt();
-        } 
-        catch(InputMismatchException e)
-        { 
-            input = -1; 
-        }
-        finally
+            ArrayList<String> songTitles = new ArrayList<String>();
+
+            // query1
+            PreparedStatement stmt = null;
+            stmt = con.prepareStatement(formatQuery);
+            stmt.setString(1, ext);
+            ResultSet results = stmt.executeQuery();
+
+            while(results.next())
+            {
+                String songTitle = results.getString("title");
+                songTitles.add(songTitle);
+            }
+            stmt.close();
+
+            // query2
+            stmt = con.prepareStatement(countryQuery);
+            stmt.setString(1, country);
+            results = stmt.executeQuery();
+
+            while(results.next())
+            {
+                String songTitle = results.getString("title");
+
+                if(songTitles.contains(songTitle))
+                {
+                    numResults++;
+                    resultNames.add(songTitle);
+                }
+            }
+
+        } catch(SQLException e){e.printStackTrace();}
+
+        System.out.println("\nFound " + numResults + "results:");
+        for(String s : resultNames)
         {
-            KEYBOARD.nextLine();
+            System.out.println(s);
         }
-        return input;
+        System.out.println(" ");
     }
 
     // Removes all artists by a given name and their associated products (albums/songs)
